@@ -7,18 +7,17 @@ import sqlite3 as db
 def age_group(edad):
     if edad <= 20:
         return 1
-    if edad >20 and edad <=30:
+    if edad > 20 and edad <=30:
         return 2
-    elif edad >30 and edad <=40:
+    elif edad > 30 and edad <=40:
         return 3
     elif edad > 40 and edad <=50:
         return 4
     elif edad > 50 and edad <= 60:
         return 5
-    else: 6
+    else: return 6
 
 if __name__ == '__main__':
-
     df = pd.read_csv('clientes.csv', delimiter=';')
 
     df['fecha_nacimiento'] = pd.to_datetime(df['fecha_nacimiento'])
@@ -30,20 +29,21 @@ if __name__ == '__main__':
     # delinquency =  {current-date} days -{due_date} days
     df['delinquency'] = datetime.now().day - df['fecha_vencimiento'].dt.day
 
-    df = df.rename({'fecha_nacimiento': 'birth_date',
-                    'fecha_vencimiento': 'due_date',
-                    'deuda': 'due_balance',
-                    'direccion': 'address',
-                    'telefono': 'phone',
-                    'correo': 'email',
-                    'estatus_contacto': 'status',
-                    'prioridad': 'priority'}, axis=1)
+    df = df.rename(
+        {'fecha_nacimiento': 'birth_date',
+        'fecha_vencimiento': 'due_date',
+        'deuda': 'due_balance',
+        'direccion': 'address',
+        'telefono': 'phone',
+        'correo': 'email',
+        'estatus_contacto': 'status',
+        'prioridad': 'priority'},
+        axis=1)
 
     df['phone'] = df['phone'].apply(lambda x: str(x))
 
     df['last_name'] = df['last_name'].apply(lambda x: x.upper() if x is not np.nan else x)
     df['first_name'] = df['first_name'].apply(lambda x: x.upper() if x is not np.nan else x)
-
     df['address'] = df['address'].apply(lambda x: x.upper() if x is not np.nan else x)
     df['gender'] = df['gender'].apply(lambda x: x.upper() if x is not np.nan else x)
     df['status'] = df['status'].apply(lambda x: x.upper() if x is not np.nan else x)
@@ -54,15 +54,19 @@ if __name__ == '__main__':
         'due_date', 'due_balance', 'address'
     ]]
 
-    df3 =df[[
+    df3 =df[
+        [
         'fiscal_id','email',
         'status','priority'
-    ]]
+        ]
+    ]
 
-    df4 =df[[
+    df4 =df[
+        [
         'fiscal_id','phone',
         'status','priority'
-    ]]
+        ]
+    ]
 
     df2.to_excel('clientes.xlsx', index=False)
     df3.to_excel('emails.xlsx', index=False)
